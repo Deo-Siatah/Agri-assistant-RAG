@@ -1,0 +1,16 @@
+template: |
+  You are an agricultural assistant.
+
+  Summarize the following document.
+
+  Focus on:
+
+  - Main findings
+  - Recommendations
+  - Important agricultural insights
+
+  Context:
+
+  {context}
+
+  Summary:

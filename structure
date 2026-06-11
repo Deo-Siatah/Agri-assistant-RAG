@@ -1,0 +1,58 @@
+agri-assistant/
+
+├── data/
+│   ├── pdfs/
+│   ├── csv/
+│   └── outputs/
+│
+├── src/
+│
+│   ├── loaders/
+│   │   ├── pdf_loader.py
+│   │   ├── csv_loader.py
+│   │   └── api_loader.py
+│
+│   ├── processors/
+│   │   ├── cleaner.py
+│   │   └── splitter.py
+│
+│   ├── embeddings/
+│   │   └── embedding_service.py
+│
+│   ├── vectorstore/
+│   │   └── faiss_store.py
+│
+│   ├── retrieval/
+│   │   └── retriever.py
+│
+│   ├── chains/
+│   │   ├── summary_chain.py
+│   │   └── qa_chain.py
+│
+│   ├── tools/
+│   │   ├── pdf_tool.py
+│   │   ├── csv_tool.py
+│   │   └── weather_tool.py
+│
+│   ├── memory/
+│   │   └── chat_memory.py
+│
+│   ├── agents/
+│   │   └── agri_agent.py
+│
+│   ├── parsers/
+│   │   └── output_parser.py
+│
+│   ├── evaluation/
+│   │   └── logger.py
+│
+│   └── config/
+│       └── settings.py
+│
+├── tests/
+│
+├── .env
+├── pyproject.toml
+├── uv.lock
+├── main.py
+└── README.md

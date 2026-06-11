@@ -1,0 +1,169 @@
+farmer_id,county,crop,season,yield_kg,rainfall_mm
+1,Trans Nzoia,Maize,2023,4650,850
+2,Trans Nzoia,Maize,2023,4750,870
+3,Trans Nzoia,Maize,2023,4600,860
+4,Trans Nzoia,Maize,2024,4850,890
+5,Trans Nzoia,Maize,2024,4950,880
+6,Trans Nzoia,Maize,2024,4800,875
+7,Trans Nzoia,Maize,2025,5050,910
+8,Trans Nzoia,Maize,2025,5150,895
+9,Trans Nzoia,Maize,2025,5000,905
+10,Trans Nzoia,Maize,2026,5200,930
+11,Trans Nzoia,Maize,2026,5300,915
+12,Trans Nzoia,Maize,2026,5150,925
+13,Uasin Gishu,Maize,2023,4950,890
+14,Uasin Gishu,Maize,2023,5050,910
+15,Uasin Gishu,Maize,2023,4900,900
+16,Uasin Gishu,Maize,2024,5250,930
+17,Uasin Gishu,Maize,2024,5350,920
+18,Uasin Gishu,Maize,2024,5200,925
+19,Uasin Gishu,Maize,2025,5450,960
+20,Uasin Gishu,Maize,2025,5550,945
+21,Uasin Gishu,Maize,2025,5400,955
+22,Uasin Gishu,Maize,2026,5600,980
+23,Uasin Gishu,Maize,2026,5700,965
+24,Uasin Gishu,Maize,2026,5550,975
+25,Bungoma,Maize,2023,4650,940
+26,Bungoma,Maize,2023,4750,960
+27,Bungoma,Maize,2023,4600,950
+28,Bungoma,Maize,2024,4850,990
+29,Bungoma,Maize,2024,4950,975
+30,Bungoma,Maize,2024,4800,985
+31,Bungoma,Maize,2025,5150,1010
+32,Bungoma,Maize,2025,5250,995
+33,Bungoma,Maize,2025,5100,1005
+34,Bungoma,Maize,2026,5300,1030
+35,Bungoma,Maize,2026,5400,1015
+36,Bungoma,Maize,2026,5250,1025
+37,Nakuru,Maize,2023,4150,770
+38,Nakuru,Maize,2023,4250,790
+39,Nakuru,Maize,2023,4100,780
+40,Nakuru,Maize,2024,4350,810
+41,Nakuru,Maize,2024,4450,800
+42,Nakuru,Maize,2024,4300,805
+43,Nakuru,Maize,2025,4550,830
+44,Nakuru,Maize,2025,4650,815
+45,Nakuru,Maize,2025,4500,825
+46,Nakuru,Maize,2026,4700,850
+47,Nakuru,Maize,2026,4800,835
+48,Nakuru,Maize,2026,4650,845
+49,Nandi,Maize,2023,4850,870
+50,Nandi,Maize,2023,4950,890
+51,Nandi,Maize,2023,4800,880
+52,Nandi,Maize,2024,5050,910
+53,Nandi,Maize,2024,5150,895
+54,Nandi,Maize,2024,5000,905
+55,Nandi,Maize,2025,5250,930
+56,Nandi,Maize,2025,5350,915
+57,Nandi,Maize,2025,5200,925
+58,Nandi,Maize,2026,5400,950
+59,Nandi,Maize,2026,5500,935
+60,Nandi,Maize,2026,5350,945
+61,Kakamega,Maize,2023,3750,1150
+62,Kakamega,Maize,2023,3850,1170
+63,Kakamega,Maize,2023,3700,1160
+64,Kakamega,Maize,2024,3950,1200
+65,Kakamega,Maize,2024,4050,1185
+66,Kakamega,Maize,2024,3900,1195
+67,Kakamega,Maize,2025,4150,1220
+68,Kakamega,Maize,2025,4250,1205
+69,Kakamega,Maize,2025,4100,1215
+70,Kakamega,Maize,2026,4300,1240
+71,Kakamega,Maize,2026,4400,1225
+72,Kakamega,Maize,2026,4250,1235
+73,Kericho,Maize,2023,4450,1040
+74,Kericho,Maize,2023,4550,1060
+75,Kericho,Maize,2023,4400,1050
+76,Kericho,Maize,2024,4750,1110
+77,Kericho,Maize,2024,4850,1095
+78,Kericho,Maize,2024,4700,1105
+79,Kericho,Maize,2025,4950,1130
+80,Kericho,Maize,2025,5050,1115
+81,Kericho,Maize,2025,4900,1125
+82,Kericho,Maize,2026,5100,1150
+83,Kericho,Maize,2026,5200,1135
+84,Kericho,Maize,2026,5050,1145
+85,Narok,Maize,2023,4250,750
+86,Narok,Maize,2023,4350,770
+87,Narok,Maize,2023,4200,760
+88,Narok,Maize,2024,4450,790
+89,Narok,Maize,2024,4550,775
+90,Narok,Maize,2024,4400,785
+91,Narok,Maize,2025,4650,810
+92,Narok,Maize,2025,4750,795
+93,Narok,Maize,2025,4600,805
+94,Narok,Maize,2026,4800,830
+95,Narok,Maize,2026,4900,815
+96,Narok,Maize,2026,4750,825
+97,Siaya,Maize,2023,3050,1000
+98,Siaya,Maize,2023,3150,1020
+99,Siaya,Maize,2023,3000,1010
+100,Siaya,Maize,2024,3250,1060
+101,Siaya,Maize,2024,3350,1045
+102,Siaya,Maize,2024,3200,1055
+103,Siaya,Maize,2025,3450,1090
+104,Siaya,Maize,2025,3550,1075
+105,Siaya,Maize,2025,3400,1085
+106,Siaya,Maize,2026,3600,1110
+107,Siaya,Maize,2026,3700,1095
+108,Siaya,Maize,2026,3550,1105
+109,Machakos,Maize,2023,2650,650
+110,Machakos,Maize,2023,2750,670
+111,Machakos,Maize,2023,2600,660
+112,Machakos,Maize,2024,2850,690
+113,Machakos,Maize,2024,2950,675
+114,Machakos,Maize,2024,2800,685
+115,Machakos,Maize,2025,3050,710
+116,Machakos,Maize,2025,3150,695
+117,Machakos,Maize,2025,3000,705
+118,Machakos,Maize,2026,3200,730
+119,Machakos,Maize,2026,3300,715
+120,Machakos,Maize,2026,3150,725
+121,Kitui,Maize,2023,2350,600
+122,Kitui,Maize,2023,2450,620
+123,Kitui,Maize,2023,2300,610
+124,Kitui,Maize,2024,2550,640
+125,Kitui,Maize,2024,2650,625
+126,Kitui,Maize,2024,2500,635
+127,Kitui,Maize,2025,2750,660
+128,Kitui,Maize,2025,2850,645
+129,Kitui,Maize,2025,2700,655
+130,Kitui,Maize,2026,2900,680
+131,Kitui,Maize,2026,3000,665
+132,Kitui,Maize,2026,2850,675
+133,Meru,Maize,2023,3450,900
+134,Meru,Maize,2023,3550,920
+135,Meru,Maize,2023,3400,910
+136,Meru,Maize,2024,3650,950
+137,Meru,Maize,2024,3750,935
+138,Meru,Maize,2024,3600,945
+139,Meru,Maize,2025,3850,980
+140,Meru,Maize,2025,3950,965
+141,Meru,Maize,2025,3800,975
+142,Meru,Maize,2026,4000,1000
+143,Meru,Maize,2026,4100,985
+144,Meru,Maize,2026,3950,995
+145,Embu,Maize,2023,3550,850
+146,Embu,Maize,2023,3650,870
+147,Embu,Maize,2023,3500,860
+148,Embu,Maize,2024,3750,890
+149,Embu,Maize,2024,3850,875
+150,Embu,Maize,2024,3700,885
+151,Embu,Maize,2025,3950,920
+152,Embu,Maize,2025,4050,905
+153,Embu,Maize,2025,3900,915
+154,Embu,Maize,2026,4100,940
+155,Embu,Maize,2026,4200,925
+156,Embu,Maize,2026,4050,935
+157,Laikipia,Maize,2023,2550,600
+158,Laikipia,Maize,2023,2650,620
+159,Laikipia,Maize,2023,2500,610
+160,Laikipia,Maize,2024,2750,640
+161,Laikipia,Maize,2024,2850,625
+162,Laikipia,Maize,2024,2700,635
+163,Laikipia,Maize,2025,2950,670
+164,Laikipia,Maize,2025,3050,655
+165,Laikipia,Maize,2025,2900,665
+166,Laikipia,Maize,2026,3100,690
+167,Laikipia,Maize,2026,3200,675
+168,Laikipia,Maize,2026,3050,685
