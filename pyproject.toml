@@ -41,3 +41,6 @@ torch = { index = "pytorch-cpu" }
 markers = [
     "integration: tests that hit the live Postgres/pgvector store",
 ]
+
+[tool.vercel]
+entrypoint = "src.api.main:app"
