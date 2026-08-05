@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     database_url: str= Field(..., alias="DATABASE_URL")
     redis_url: str = Field(..., alias="REDIS_URL")
 
+    hugging_face_url: str = Field(..., alias="HUGGINGFACEHUB_API_TOKEN")
+
 
     # Paths
     pdf_dir: str = Field("data/pdfs", alias="PDF_DIR")
