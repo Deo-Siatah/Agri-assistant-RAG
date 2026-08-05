@@ -55,7 +55,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173","http://localhost:5174","https://agri-assistant-rag.vercel.app"],
+    allow_origins=["http://localhost:5173","http://localhost:5174","https://agri-assistant-rag-1.onrender.com"],
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
