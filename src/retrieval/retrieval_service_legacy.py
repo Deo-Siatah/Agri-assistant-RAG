@@ -1,4 +1,4 @@
-from src.config.config_loader import load_config
+from src.config.app_config import get_app_config
 
 
 def retrieve_context(
@@ -6,10 +6,10 @@ def retrieve_context(
     question
 ):
 
-    config = load_config()
+    config = get_app_config()
 
-    threshold = config["retrieval"]["similarity_threshold"]
-    top_k = config["retrieval"]["top_k"]
+    threshold = config.retrieval.similarity_threshold
+    top_k = config.retrieval.top_k
 
     results = vectorstore.similarity_search_with_score(
         question,

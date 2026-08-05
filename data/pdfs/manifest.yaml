@@ -1,0 +1,43 @@
+# Tier 2 document manifest — one entry per source PDF.
+# Read by src/ingestion/tier2_ingest.py to attach metadata to each `documents` row.
+# Review dates/urls marked "approximate" or "verify" before running ingestion.
+
+- filename: "cimmyt_maize_diseases_field_guide.pdf"
+  title: "Maize Diseases: A Guide for Field Identification"
+  source_url: "https://repository.cimmyt.org/server/api/core/bitstreams/d14102da-8e31-414e-ab2d-932f31292265/content"
+  doc_type: pest_disease_reference
+  source_authority: institutional
+  region: null
+  published_date: "1984-01-01"   # approximate — CIMMYT's standard field ID guide, verify exact edition/year
+
+- filename: "kalro_managing_maize_diseases.pdf"
+  title: "Understanding and Managing Maize Diseases"
+  source_url: "https://kalroerepository.kalro.org/server/api/core/bitstreams/8fc758b2-316f-4612-813c-b6900eb3bb2a/content"
+  doc_type: pest_disease_reference
+  source_authority: institutional
+  region: "Kenya"
+  published_date: null   # not confirmed — verify from document cover/publication page
+
+- filename: "fao_cabi_faw_pocket_guide.pdf"
+  title: "Fall Armyworm Field Handbook: Identification and Management"
+  source_url: "https://www.cabi.org/wp-content/uploads/FAW-pocket-guide.pdf"
+  doc_type: pest_disease_reference
+  source_authority: institutional
+  region: null   # written for sub-Saharan Africa broadly, not Kenya-specific
+  published_date: "2018-01-01"   # verify — FAW guides in this series are typically 2017-2019
+
+- filename: "fao_faw_manual.pdf"
+  title: "Manual on Integrated Fall Armyworm Management"
+  source_url: "https://openknowledge.fao.org/server/api/core/bitstreams/9b3b2198-00ef-4484-91e6-fc8c87a505c5/content"
+  doc_type: extension_guide
+  source_authority: institutional
+  region: null
+  published_date: "2020-01-01"   # verify from FAO publication metadata
+
+- filename: "kcep_cral_maize_extension_manual.pdf"
+  title: "Maize Extension and Training Manual"
+  source_url: "https://www.kcepcral.go.ke/wp-content/uploads/2017/04/KCEP-Maize-Extension-and-Training-Manual.pdf"
+  doc_type: extension_guide
+  source_authority: institutional
+  region: "Kenya"
+  published_date: "2017-04-01"   # inferred from URL path, verify against document cover

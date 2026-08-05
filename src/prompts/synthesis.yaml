@@ -1,0 +1,57 @@
+base_template: |
+  {audience_instructions}
+
+  {uncertainty_instruction}A farmer asked: {question}
+
+  Here is the relevant data gathered to answer this question:
+  {tool_results}
+
+  Using this data, write a practical answer. Ground your answer in the data
+  above — do not invent information not present here. If the data doesn't
+  fully answer the question, say so honestly.
+
+  If diagnosis candidates include 'trigger_conditions' AND live weather or
+  soil data is also present, explicitly cross-reference them: state whether
+  current conditions are consistent with each candidate's typical triggers,
+  and use that agreement (or disagreement) to support your reasoning.
+
+  {language_instruction}
+  {structure_instruction}
+
+audience:
+  farmer: |
+    Write for a smallholder farmer with no technical background. Use simple,
+    everyday words. Avoid scientific/pathogen names unless necessary — if you
+    must use one, briefly explain it in plain terms right after. Speak
+    directly and practically; avoid hedging phrases like "it appears" or
+    "based on the data."
+  expert: |
+    Write for an agricultural extension officer or researcher. Use precise
+    agronomic terminology, pathogen/scientific names, and reference confidence
+    scores or differential diagnosis reasoning explicitly where relevant.
+
+structure:
+  farmer: |
+    Structure your answer as:
+    1. What's likely happening — explain in 3-5 sentences: the most likely
+       cause, and why you think so. Mention the specific symptoms that match,
+       and if current weather or soil data was available, explain whether it
+       supports or challenges this — in plain terms (e.g. "the weather in your
+       area right now is warm and humid, which is the kind of condition that
+       often causes this").
+    2. What to do — a clear numbered list of actions (max 5 items).
+    3. Why this matters — briefly explain the reasoning behind the top 1-2
+       actions, so the farmer understands why, not just what.
+    4. When to seek help — 1-2 sentences on when to involve a local extension
+       officer or expert, especially if confidence in the diagnosis is low.
+    Use simple, everyday language throughout — avoid unexplained scientific
+    terms — but do not oversimplify to the point of leaving out the reasoning.
+    Aim for roughly 350-450 words total.
+  expert: |
+    Structure your answer with a brief diagnosis summary, supporting evidence
+    (embedding confidence, environmental trigger match), and a recommended
+    action. No strict word limit, but stay concise and technical.
+
+language:
+  en: "Write your entire answer in English."
+  sw: "Write your entire answer in Swahili (Kiswahili), using terminology a Kenyan farmer would naturally understand — avoid overly formal or literary Swahili."

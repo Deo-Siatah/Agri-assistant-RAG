@@ -1,0 +1,17 @@
+:root {
+--color-bg: #FAFAFA;
+--color-surface: #FFFFFF;
+--color-text: #1A1A1A;
+--color-text-muted: #6B6B6B;
+--color-border: #E4E4E4;
+--color-confidence-low: #B8860B;
+--color-confidence-high: #3F6B4F;
+--font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+--radius-sm: 6px;
+--radius-md: 10px;
+--spacing-1: 4px;
+--spacing-2: 8px;
+--spacing-3: 16px;
+--spacing-4: 24px;
+--spacing-5: 32px;
+}

@@ -1,221 +1,145 @@
+"""
+CSV analytics tool — function-based, matching the pattern used elsewhere
+(weather_tool, soil_tool). Entry point expected by src/agents/llm_router.py
+is query_csv(question).
+"""
+
+from __future__ import annotations
+
+from functools import lru_cache
+
+from src.config.settings import get_settings
 from src.loaders.csv_loader import load_csv
 
 
-class CSVTool:
+@lru_cache
+def _get_dataframe():
+    settings = get_settings()
+    return load_csv(settings.csv_path)
 
-    def __init__(self, file_path):
 
-        self.df = load_csv(file_path)
+# ----------------------------------
+# Dataset Information
+# ----------------------------------
 
-    # ----------------------------------
-    # Dataset Information
-    # ----------------------------------
+def describe_dataset():
+    df = _get_dataframe()
+    return {"rows": len(df), "columns": df.columns.tolist()}
 
-    def describe_dataset(self):
 
-        return {
-            "rows": len(self.df),
-            "columns": self.df.columns.tolist()
-        }
+# ----------------------------------
+# Yield Analytics
+# ----------------------------------
 
-    # ----------------------------------
-    # Yield Analytics
-    # ----------------------------------
+def average_yield():
+    df = _get_dataframe()
+    avg = df["yield_kg"].mean()
+    return {"metric": "average_yield", "value": float(avg)}
 
-    def average_yield(self):
 
-        avg = self.df[
-            "yield_kg"
-        ].mean()
+def total_yield():
+    df = _get_dataframe()
+    total = df["yield_kg"].sum()
+    return f"Total yield across all records is {total:.2f} kg."
 
-        return {
-            "metric": "average_yield",
-            "value": float(avg)
-        }
 
-    def total_yield(self):
+def highest_yield_county():
+    df = _get_dataframe()
+    county_totals = df.groupby("county")["yield_kg"].sum()
+    county = county_totals.idxmax()
+    value = county_totals.max()
+    return {"metric": "highest_yield_county", "county": county, "yield_kg": float(value)}
 
-        total = self.df["yield_kg"].sum()
 
-        return (
-            f"Total yield across all records "
-            f"is {total:.2f} kg."
-        )
+def lowest_yield_county():
+    df = _get_dataframe()
+    county_totals = df.groupby("county")["yield_kg"].sum()
+    county = county_totals.idxmin()
+    value = county_totals.min()
+    return {"metric": "lowest_yield_county", "county": county, "yield_kg": float(value)}
 
-    def highest_yield_county(self):
 
-        county_totals = (
-            self.df
-            .groupby("county")["yield_kg"]
-            .sum()
-        )
+def top_counties(limit=5):
+    df = _get_dataframe()
+    rankings = (
+        df.groupby("county")["yield_kg"].sum().sort_values(ascending=False).head(limit)
+    )
+    result = "Top producing counties:\n"
+    for county, value in rankings.items():
+        result += f"- {county}: {value:.2f} kg\n"
+    return result
 
-        county = county_totals.idxmax()
 
-        value = county_totals.max()
+# ----------------------------------
+# County Analytics
+# ----------------------------------
 
-        return {
-            "metric": "highest_yield_county",
-            "county": county,
-            "yield_kg": float(value)
-        }
+def county_average_yield(county):
+    df = _get_dataframe()
+    county_data = df[df["county"].str.lower() == county.lower()]
 
-    def lowest_yield_county(self):
+    if county_data.empty:
+        return f"No data found for {county}"
 
-        county_totals = (
-            self.df
-            .groupby("county")["yield_kg"]
-            .sum()
-        )
+    avg = county_data["yield_kg"].mean()
+    return f"Average yield in {county.title()} is {avg:.2f} kg."
 
-        county = county_totals.idxmin()
 
-        value = county_totals.min()
+# ----------------------------------
+# Crop Analytics
+# ----------------------------------
 
-        return {
-            "metric": "lowest_yield_county",
-            "county": county,
-            "yield_kg": float(value)
-        }
+def best_crop():
+    df = _get_dataframe()
+    crops = df.groupby("crop")["yield_kg"].mean()
+    crop = crops.idxmax()
+    value = crops.max()
+    return f"{crop} has the highest average yield at {value:.2f} kg."
 
-    def top_counties(self, limit=5):
 
-        rankings = (
-            self.df
-            .groupby("county")["yield_kg"]
-            .sum()
-            .sort_values(
-                ascending=False
-            )
-            .head(limit)
-        )
+# ----------------------------------
+# Rainfall Analytics
+# ----------------------------------
 
-        result = "Top producing counties:\n"
+def rainfall_correlation():
+    df = _get_dataframe()
+    correlation = df["rainfall_mm"].corr(df["yield_kg"])
+    return f"Rainfall and yield have a correlation of {correlation:.2f}."
 
-        for county, value in rankings.items():
 
-            result += (
-                f"- {county}: "
-                f"{value:.2f} kg\n"
-            )
+def average_rainfall():
+    df = _get_dataframe()
+    avg = df["rainfall_mm"].mean()
+    return f"Average rainfall is {avg:.2f} mm."
 
-        return result
 
-    # ----------------------------------
-    # County Analytics
-    # ----------------------------------
+# ----------------------------------
+# Routing
+# ----------------------------------
 
-    def county_average_yield(self, county):
+def run(query: str):
+    query = query.lower()
 
-        county_data = self.df[
-            self.df["county"]
-            .str.lower()
-            == county.lower()
-        ]
+    if "average yield" in query:
+        return average_yield()
+    if "total yield" in query:
+        return total_yield()
+    if "highest yield" in query:
+        return highest_yield_county()
+    if "lowest yield" in query:
+        return lowest_yield_county()
+    if "top counties" in query:
+        return top_counties()
+    if "best crop" in query:
+        return best_crop()
+    if "rainfall relationship" in query:
+        return rainfall_correlation()
+    if "average rainfall" in query:
+        return average_rainfall()
 
-        if county_data.empty:
+    return "I cannot answer that from the CSV dataset."
 
-            return (
-                f"No data found for "
-                f"{county}"
-            )
 
-        avg = county_data[
-            "yield_kg"
-        ].mean()
-
-        return (
-            f"Average yield in "
-            f"{county.title()} "
-            f"is {avg:.2f} kg."
-        )
-
-    # ----------------------------------
-    # Crop Analytics
-    # ----------------------------------
-
-    def best_crop(self):
-
-        crops = (
-            self.df
-            .groupby("crop")["yield_kg"]
-            .mean()
-        )
-
-        crop = crops.idxmax()
-
-        value = crops.max()
-
-        return (
-            f"{crop} has the highest "
-            f"average yield at "
-            f"{value:.2f} kg."
-        )
-
-    # ----------------------------------
-    # Rainfall Analytics
-    # ----------------------------------
-
-    def rainfall_correlation(self):
-
-        correlation = (
-            self.df["rainfall_mm"]
-            .corr(
-                self.df["yield_kg"]
-            )
-        )
-
-        return (
-            f"Rainfall and yield have "
-            f"a correlation of "
-            f"{correlation:.2f}."
-        )
-
-    def average_rainfall(self):
-
-        avg = (
-            self.df["rainfall_mm"]
-            .mean()
-        )
-
-        return (
-            f"Average rainfall is "
-            f"{avg:.2f} mm."
-        )
-
-    # ----------------------------------
-    # Routing
-    # ----------------------------------
-
-    def run(self, query):
-
-        query = query.lower()
-
-        if "average yield" in query:
-            return self.average_yield()
-
-        if "total yield" in query:
-            return self.total_yield()
-
-        if "highest yield" in query:
-            return self.highest_yield_county()
-
-        if "lowest yield" in query:
-            return self.lowest_yield_county()
-
-        if "top counties" in query:
-            return self.top_counties()
-
-        if "best crop" in query:
-            return self.best_crop()
-
-        if "rainfall relationship" in query:
-            return self.rainfall_correlation()
-
-        if "average rainfall" in query:
-            return self.average_rainfall()
-
-        return (
-            "I cannot answer that "
-            "from the CSV dataset."
-        )
+def query_csv(question: str):
+    """Entry point expected by src/agents/llm_router.py."""
+    return run(question)

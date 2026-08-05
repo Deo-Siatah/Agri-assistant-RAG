@@ -18,4 +18,18 @@ dependencies = [
     "requests>=2.34.2",
     "rich>=15.0.0",
     "sentence-transformers>=5.5.1",
+    "langchain_groq",
+    "psycopg2-binary",
+    "pgvector",
+    "langchain-text-splitters",
+    "pytest",
+    "redis",
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx"
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: tests that hit the live Postgres/pgvector store",
 ]

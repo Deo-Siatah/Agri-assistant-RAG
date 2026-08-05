@@ -2,8 +2,8 @@ app:
   name: Agri Assistant
 
 llm:
-  provider: gemini
-  model: gemini-2.5-flash-lite
+  provider: groq
+  model: llama-3.3-70b-versatile
   temperature: 0.2
 
 retrieval:

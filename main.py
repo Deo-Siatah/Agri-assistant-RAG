@@ -16,7 +16,7 @@ from src.evaluation.confidence import classify_confidence
 from src.loaders.document_loader import load_all_pdfs
 
 from src.tools.csv_tool import CSVTool
-from src.agents.router import route_query
+from agents.router_legacy import route_query
 from src.chains.csv_analysis_chain import (
     build_csv_analysis_chain
 )
