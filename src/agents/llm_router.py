@@ -258,7 +258,7 @@ def route_and_execute(
     )
     if needs_weather and "get_weather" not in tools_invoked:
         try:
-            weather_result = get_weather_summary(lat, lon)
+            weather_result = _execute_tool("get_weather", {"lat": lat, "lon": lon}, lat, lon)
             tool_results["get_weather"] = weather_result
             tools_invoked.append("get_weather")
             weather_used = True
@@ -272,7 +272,7 @@ def route_and_execute(
     needs_soil = any(r.get("soil_related") for r in diagnosis_results)
     if needs_soil and "get_soil_data" not in tools_invoked:
         try:
-            soil_result = get_soil_summary(lat, lon)
+            soil_result=_execute_tool("get_soil_data", {"lat": lat, "lon": lon}, lat, lon)
             tool_results["get_soil_data"] = soil_result
             tools_invoked.append("get_soil_data")
             soil_used = True
