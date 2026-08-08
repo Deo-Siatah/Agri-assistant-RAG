@@ -9,6 +9,7 @@ export interface AskRequest {
   lon: number
   audience: Audience
   language: Language
+  session_id?: string | null
 }
 
 export interface AskResponse {
@@ -17,6 +18,7 @@ export interface AskResponse {
   cache_hit: boolean
   latency_ms: number
   request_id: string
+  session_id: string
 }
 
 const apiClient = axios.create({

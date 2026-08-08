@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -33,4 +33,9 @@ class AskRequest(BaseModel):
     language: Literal["en", "sw"] = Field(
         default="en",
         description="Preferred output language for the generated answer.",
+    )
+    session_id: Optional[str] =Field(
+        default=None,
+        description="Optional session ID to maintain conversation context across follow-up questions. "
+                    "If omitted, a new session is started and its ID is returned in the response."
     )

@@ -30,45 +30,53 @@ interface ChatTurn {
   timestamp: number
 }
 
+interface StoredChatState {
+  sessionId: string | null
+  messages: ChatTurn[]
+}
+
+function loadStoredChatState(county: County | null): StoredChatState {
+  if (!county) return { sessionId: null, messages: [] }
+
+  const raw = localStorage.getItem(`agri_chat_${county.name}`)
+  if (!raw) return { sessionId: null, messages: [] }
+
+  try {
+    const parsed = JSON.parse(raw) as Partial<StoredChatState>
+    return {
+      sessionId: parsed.sessionId ?? null,
+      messages: parsed.messages ?? [],
+    }
+  } catch {
+    return { sessionId: null, messages: [] }
+  }
+}
+
 export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
   const [question, setQuestion] = useState('')
   const [audience, setAudience] = useState<Audience>('farmer')
   const [language, setLanguage] = useState<Language>('en')
-  const [messages, setMessages] = useState<ChatTurn[]>(() => {
-    if (!selectedCounty) return []
-    const storedMessages = localStorage.getItem(`agri_chat_${selectedCounty.name}`)
-    if (!storedMessages) return []
-    try {
-      return JSON.parse(storedMessages) as ChatTurn[]
-    } catch {
-      return []
-    }
-  })
+  const [messages, setMessages] = useState<ChatTurn[]>(
+    () => loadStoredChatState(selectedCounty).messages
+  )
+  const [sessionId, setSessionId] = useState<string | null>(
+    () => loadStoredChatState(selectedCounty).sessionId
+  )
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const messageListRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!selectedCounty) {
-      setMessages([])
-      return
-    }
-    const storedMessages = localStorage.getItem(`agri_chat_${selectedCounty.name}`)
-    if (!storedMessages) {
-      setMessages([])
-      return
-    }
-    try {
-      setMessages(JSON.parse(storedMessages) as ChatTurn[])
-    } catch {
-      setMessages([])
-    }
+    const stored = loadStoredChatState(selectedCounty)
+    setMessages(stored.messages)
+    setSessionId(stored.sessionId)
   }, [selectedCounty])
 
   useEffect(() => {
     if (!selectedCounty) return
-    localStorage.setItem(`agri_chat_${selectedCounty.name}`, JSON.stringify(messages))
-  }, [messages, selectedCounty])
+    const toStore: StoredChatState = { sessionId, messages }
+    localStorage.setItem(`agri_chat_${selectedCounty.name}`, JSON.stringify(toStore))
+  }, [messages, sessionId, selectedCounty])
 
   useEffect(() => {
     if (messageListRef.current) {
@@ -98,6 +106,7 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
         lon: selectedCounty.lon,
         audience,
         language,
+        session_id: sessionId,
       })
 
       const latencyMs =
@@ -119,6 +128,7 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
           timestamp: Date.now(),
         },
       ])
+      setSessionId(response.session_id)
       setQuestion('')
     } catch (caughtError) {
       const message = caughtError instanceof Error ? caughtError.message : 'An unexpected error occurred'
@@ -210,7 +220,7 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
 
         .chat-body {
           flex-grow: 1;
-          padding: 1rem; /* Reduced padding on mobile to save horizontal space */
+          padding: 1rem;
           overflow-y: auto;
           display: flex;
           flex-direction: column;
@@ -218,7 +228,6 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
           scroll-behavior: smooth;
         }
 
-        /* Hide scrollbar completely but keep functionality */
         .chat-body::-webkit-scrollbar {
           display: none;
         }
@@ -229,8 +238,8 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
 
         .message-row {
           display: flex;
-          gap: 8px; /* Slightly tighter gap on mobile */
-          max-width: 95%; /* Gives text more room on small screens */
+          gap: 8px;
+          max-width: 95%;
         }
 
         .message-row.user {
@@ -242,7 +251,6 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
           align-self: flex-start;
         }
 
-        /* Responsive Design Upgrades for MD/LG Screens */
         @media (min-width: 768px) {
           .chat-container {
             width: 100%;
@@ -254,12 +262,12 @@ export default function ChatPanel({ selectedCounty }: ChatPanelProps) {
           }
           
           .chat-body {
-            padding: 1.5rem; /* Restores spacious padding on larger screens */
+            padding: 1.5rem;
           }
           
           .message-row {
-            gap: 12px; /* Restores spacious gap */
-            max-width: 85%; /* Keeps chat bubbles from getting too wide on large screens */
+            gap: 12px;
+            max-width: 85%;
           }
         }
 

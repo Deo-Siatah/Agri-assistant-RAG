@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import time
+import uuid
 
 from fastapi import APIRouter, HTTPException, Request
 
@@ -18,6 +19,7 @@ router = APIRouter(tags=["ask"])
 @router.post("/ask", response_model=AskResponse)
 def ask_question(payload: AskRequest, request: Request) -> AskResponse:
     request_id = get_request_id(request)
+    session_id = payload.session_id or str(uuid.uuid4())
     start_time = time.perf_counter()
 
     try:
@@ -30,6 +32,7 @@ def ask_question(payload: AskRequest, request: Request) -> AskResponse:
             audience=payload.audience,
             language=payload.language,
             request_id=request_id,
+            session_id=session_id,
         )
     except Exception as exc:  # noqa: BLE001
         logger.error(
@@ -51,4 +54,5 @@ def ask_question(payload: AskRequest, request: Request) -> AskResponse:
         cache_hit=bool(result.get("cache_hit", False)),
         latency_ms=latency_ms,
         request_id=request_id,
+        session_id=session_id,
     )

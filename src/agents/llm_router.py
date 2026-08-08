@@ -18,6 +18,7 @@ from src.cache.cache_utils import cache_get, cache_set
 from src.chains.llm import get_llm
 from src.chains.prompt_loader import load_synthesis_prompts
 from src.logging.query_logger import log_query
+from src.memory.session_store import append_turn, build_context_messages, get_session_context
 
 
 logger = logging.getLogger(__name__)
@@ -188,6 +189,7 @@ def route_and_execute(
     lat: float,
     lon: float,
     request_id: str | None = None,
+    session_id: str | None = None,
 ) -> dict:
     """
     Ask the LLM which tool(s) to call for this question, execute them, and
@@ -198,18 +200,17 @@ def route_and_execute(
     llm = get_llm()
     llm_with_tools = llm.bind_tools(TOOLS, tool_choice="auto", parallel_tool_calls=False)
 
+    context_messages = build_context_messages(session_id) if session_id else []
+    system_message_dict = {
+        "role": "system",
+        "content": (
+            "You are an agricultural assistant specialized in maize farming in Kenya. You have access ONLY to the tools explicitly provided in this request. Do not call any tool that is not in that list. If the user's question is unrelated to maize farming, agriculture, weather, or soil, do not call any tool."
+        ),
+    }
+
     try:
-        response = llm_with_tools.invoke(
-            [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are an agricultural assistant specialized in maize farming in Kenya. You have access ONLY to the tools explicitly provided in this request. Do not call any tool that is not in that list. If the user's question is unrelated to maize farming, agriculture, weather, or soil, do not call any tool."
-                    ),
-                },
-                {"role": "user", "content": user_question},
-            ]
-        )
+        messages = [system_message_dict] + context_messages + [{"role": "user", "content": user_question}]
+        response = llm_with_tools.invoke(messages)
         tool_calls = getattr(response, "tool_calls", None) or []
     except Exception as exc:  # noqa: BLE001
         logger.warning(
@@ -316,6 +317,7 @@ def synthesize_answer(
     tool_results: dict,
     audience: str = "farmer",
     language: str = "en",
+    session_id: str | None = None,
 ) -> str:
     """
     Produce the final natural-language answer grounded in whatever tool
@@ -326,6 +328,7 @@ def synthesize_answer(
               (e.g. "en", "sw"). Falls back to English if unrecognized.
     """
     llm = get_llm()
+    context_messages = build_context_messages(session_id) if session_id else []
 
     if not tool_results:
         response = llm.invoke(
@@ -341,6 +344,7 @@ def synthesize_answer(
                         "directly and helpfully."
                     ),
                 },
+                *context_messages,
                 {"role": "user", "content": user_question},
             ]
         )
@@ -378,7 +382,7 @@ def synthesize_answer(
         structure_instruction=prompts["structure"][audience],
     )
 
-    response = llm.invoke([{"role": "user", "content": prompt}])
+    response = llm.invoke(context_messages + [{"role": "user", "content": prompt}])
     return response.content
 
 
@@ -402,6 +406,7 @@ def answer_question(
     audience: str = "farmer",
     language: str = "en",
     request_id: str | None = None,
+    session_id: str | None = None,
 ) -> dict:
     """
     Full pipeline entry point: checks cache first, falls through to
@@ -411,10 +416,19 @@ def answer_question(
     start = time.perf_counter()
     cache_key = _build_cache_key(user_question, lat, lon, audience, language)
 
-    cached = cache_get(cache_key)
+    has_history = False
+    if session_id:
+        existing = get_session_context(session_id)
+        has_history = len(existing["turns"]) > 0
+
+    cached = None
+    if not has_history:
+        cached = cache_get(cache_key)
+
     if cached is not None:
         latency_ms = int((time.perf_counter() - start) * 1000)
         print(f"[CACHE HIT] key={cache_key} latency_ms={latency_ms}")
+        answer_text = cached["answer"]
 
         try:
             log_query(
@@ -431,13 +445,27 @@ def answer_question(
         except Exception:  # noqa: BLE001
             traceback.print_exc()
 
+        if session_id is not None:
+            append_turn(session_id, "user", user_question)
+            append_turn(session_id, "assistant", answer_text)
+
         return {**cached, "cache_hit": True}
 
     print(f"[CACHE MISS] key={cache_key} — running full pipeline")
 
-    routing_result = route_and_execute(user_question, lat, lon, request_id=request_id)
+    routing_result = route_and_execute(
+        user_question,
+        lat,
+        lon,
+        request_id=request_id,
+        session_id=session_id,
+    )
     answer = synthesize_answer(
-        user_question, routing_result["tool_results"], audience=audience, language=language
+        user_question,
+        routing_result["tool_results"],
+        audience=audience,
+        language=language,
+        session_id=session_id,
     )
 
     payload = {
@@ -445,6 +473,11 @@ def answer_question(
         "tools_invoked": routing_result["tools_invoked"],
     }
 
-    cache_set(cache_key, payload, ttl_seconds=CACHE_TTL_SECONDS)
+    if not has_history:
+        cache_set(cache_key, payload, ttl_seconds=CACHE_TTL_SECONDS)
+
+    if session_id is not None:
+        append_turn(session_id, "user", user_question)
+        append_turn(session_id, "assistant", answer)
 
     return {**payload, "cache_hit": False}

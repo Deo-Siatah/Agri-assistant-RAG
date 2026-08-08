@@ -21,6 +21,9 @@ class AskResponse(BaseModel):
     request_id: str = Field(
         description="Server-generated request identifier for tracing and support."
     )
+    session_id: str = Field(
+        description="Conversation session identifier used to persist follow-up context."
+    )
 
 
 class HealthResponse(BaseModel):
