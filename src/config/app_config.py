@@ -14,7 +14,7 @@ class AppInfo(BaseModel):
 
 class LLMConfig(BaseModel):
     provider: str = Field(default="gpt-oss")
-    model: str = Field(default="gpt-oss-120b")
+    model: str = Field(default="openai/gpt-oss-120b")
     temperature: float = Field(default=0.2, ge=0.0, le=2.0)
 
 

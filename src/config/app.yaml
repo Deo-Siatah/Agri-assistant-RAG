@@ -3,7 +3,7 @@ app:
 
 llm:
   provider: gpt-oss
-  model: gpt-oss-120b
+  model: openai/gpt-oss-120b
   temperature: 0.2
 
 retrieval:
