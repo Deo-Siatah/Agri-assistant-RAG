@@ -2,8 +2,8 @@ app:
   name: Agri Assistant
 
 llm:
-  provider: groq
-  model: llama-3.3-70b-versatile
+  provider: gpt-oss
+  model: gpt-oss-120b
   temperature: 0.2
 
 retrieval:
